@@ -1055,7 +1055,7 @@ void Orch2::doTask(Consumer &consumer)
         }
         else
         {
-            ++it;
+            it = consumer.m_toSync.upper_bound(it->first);
         }
     }
 }

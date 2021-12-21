@@ -1059,7 +1059,14 @@ void IntfMgr::doTask(Consumer &consumer)
                 }
                 if (!doIntfGeneralTask(keys, data, op))
                 {
-                    it++;
+                    if (op == DEL_COMMAND)
+                    {
+                        it = consumer.m_toSync.upper_bound(it->first);
+                    }
+                    else
+                    {
+                        it++;
+                    }
                     continue;
                 }
                 else

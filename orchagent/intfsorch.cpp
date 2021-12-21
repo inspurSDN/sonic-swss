@@ -964,7 +964,7 @@ void IntfsOrch::doTask(Consumer &consumer)
                         }
                         else
                         {
-                            it++;
+                            it = consumer.m_toSync.upper_bound(it->first);
                             continue;
                         }
                     }
@@ -1038,7 +1038,7 @@ void IntfsOrch::doTask(Consumer &consumer)
                 }
                 else
                 {
-                    it++;
+                    it = consumer.m_toSync.upper_bound(it->first);
                     continue;
                 }
             }

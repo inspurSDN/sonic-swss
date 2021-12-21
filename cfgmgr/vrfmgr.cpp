@@ -330,7 +330,7 @@ void VrfMgr::doTask(Consumer &consumer)
                     /* VRFOrch add delay so wait */
                     if (!isVrfObjExist(vrfName))
                     {
-                        it++;
+                        it = consumer.m_toSync.upper_bound(it->first);
                         continue;
                     }
 
@@ -341,7 +341,7 @@ void VrfMgr::doTask(Consumer &consumer)
 
                 if (isVrfObjExist(vrfName))
                 {
-                    it++;
+                    it = consumer.m_toSync.upper_bound(it->first);
                     continue;
                 }
             }
