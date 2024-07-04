@@ -1260,7 +1260,7 @@ bool CoppOrch::bindTrapCounter(sai_object_id_t hostif_trap_id, sai_hostif_trap_t
 
     // Create generic counter
     sai_object_id_t counter_id;
-    if (!FlowCounterHandler::createGenericCounter(counter_id))
+    if (!FlowCounterHandler::createGenericCounter(counter_id, get_trap_name_by_type(trap_type)))
     {
         return false;
     }

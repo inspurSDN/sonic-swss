@@ -7,18 +7,28 @@
 extern sai_object_id_t      gSwitchId;
 extern sai_counter_api_t*   sai_counter_api;
 
+#define MAX_LABEL_LENGTH  30
 const std::vector<sai_counter_stat_t> generic_counter_stat_ids =
 {
     SAI_COUNTER_STAT_PACKETS,
     SAI_COUNTER_STAT_BYTES,
 };
 
-bool FlowCounterHandler::createGenericCounter(sai_object_id_t &counter_id)
+bool FlowCounterHandler::createGenericCounter(sai_object_id_t &counter_id, const std::string counter_label)
 {
+    std::vector<sai_attribute_t> attrs;
     sai_attribute_t counter_attr;
     counter_attr.id = SAI_COUNTER_ATTR_TYPE;
     counter_attr.value.s32 = SAI_COUNTER_TYPE_REGULAR;
-    sai_status_t sai_status = sai_counter_api->create_counter(&counter_id, gSwitchId, 1, &counter_attr);
+    attrs.push_back(counter_attr);
+    if (!counter_label.empty())
+    {
+        counter_attr.id = SAI_COUNTER_ATTR_LABEL;
+        strncpy(counter_attr.value.chardata, counter_label.c_str(), MAX_LABEL_LENGTH);
+        counter_attr.value.chardata[MAX_LABEL_LENGTH - 1] = '\0';
+        attrs.push_back(counter_attr);
+    }
+    sai_status_t sai_status = sai_counter_api->create_counter(&counter_id, gSwitchId, (uint32_t)attrs.size(), attrs.data());
     if (sai_status != SAI_STATUS_SUCCESS)
     {
         SWSS_LOG_WARN("Failed to create generic counter");
